@@ -1,0 +1,200 @@
+/* =============================================
+   Home Page — Report Card Grid
+   ============================================= */
+.home-hero {
+  text-align: center;
+  padding: 64px 24px 48px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  margin-bottom: 48px;
+}
+.home-hero h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -.025em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, var(--vp-c-brand-1), var(--vp-c-brand-3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.home-hero p {
+  font-size: 1rem;
+  color: var(--vp-c-text-2);
+  margin: 0;
+}
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 0 24px 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+a.report-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  padding: 28px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.15s;
+}
+a.report-card:hover {
+  border-color: var(--vp-c-brand-1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+}
+
+.card-ticker {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--vp-c-brand-1);
+  margin-bottom: 4px;
+}
+.card-company {
+  font-size: 0.78rem;
+  color: var(--vp-c-text-3);
+  margin-bottom: 12px;
+}
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.45;
+  margin-bottom: 16px;
+  flex: 1;
+  color: var(--vp-c-text-1);
+}
+.card-description {
+  font-size: 0.85rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.card-tag {
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 2px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.card-date {
+  font-size: 0.75rem;
+  color: var(--vp-c-text-3);
+  margin-left: auto;
+}
+.card-arrow {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+}
+
+/* =============================================
+   Report Reading Page — Typography enhancements
+   ============================================= */
+
+/* Better table styling for financial data */
+.vp-doc table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  font-size: 0.9em;
+}
+.vp-doc thead th {
+  white-space: nowrap;
+  background: var(--vp-c-bg-soft);
+}
+.vp-doc tbody tr:hover {
+  background: var(--vp-c-bg-soft);
+}
+
+/* Highlight blockquotes (used for risk warnings) */
+.vp-doc blockquote {
+  border-left: 4px solid var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+}
+.vp-doc blockquote p {
+  color: var(--vp-c-text-1);
+  font-size: 0.92rem;
+}
+.vp-doc blockquote p:last-child {
+  margin: 0;
+}
+
+/* =============================================
+   Layout: in-page TOC on the LEFT at ≥960px
+   ============================================= */
+
+@media (min-width: 960px) and (max-width: 1279px) {
+  /* Enable flex on the doc container so aside is laid out alongside content */
+  .VPDoc .container {
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  /* Show the aside */
+  .VPDoc .aside {
+    display: block !important;
+  }
+
+  /*
+   * At 1280px VitePress sets .content { order: 1 } which places it after
+   * .left-aside { order: 1 } because the aside renders first in the DOM.
+   * Below 1280px .content has no explicit order (defaults to 0), so it
+   * renders BEFORE the aside → aside ends up on the right.
+   * Fix: give content order:2 so the left-aside (order:1) always comes first.
+   */
+  .VPDoc .content {
+    order: 2 !important;
+    margin: 0 !important;
+  }
+}
+
+/*
+ * VPLocalNav is the sticky "本文目录" bar that appears below the top nav on
+ * screens <1280px. On desktop (≥960px) the left aside is now always visible,
+ * so hide this redundant bar. Keep it on mobile.
+ */
+@media (min-width: 960px) {
+  .VPLocalNav {
+    display: none !important;
+  }
+}
+
+/* =============================================
+   Dark mode toggle: always visible in the nav bar
+   ============================================= */
+
+/*
+ * VitePress hides VPNavBarAppearance below 1280px and shows the toggle
+ * inside the "..." dropdown instead. Override to always show it in the bar.
+ */
+.VPNavBarAppearance {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* =============================================
+   Mobile
+   ============================================= */
+@media (max-width: 640px) {
+  .home-hero h1 { font-size: 1.7rem; }
+  .reports-grid { grid-template-columns: 1fr; padding: 0 16px 60px; }
+}
