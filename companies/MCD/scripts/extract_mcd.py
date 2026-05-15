@@ -5,7 +5,6 @@ Processes all 10-K annual reports and 10-Q quarterly reports.
 Output written to /tmp/mcd_extracted.txt
 """
 from bs4 import BeautifulSoup
-import re
 import os
 import sys
 
@@ -30,44 +29,89 @@ for fname in all_files:
         label = f'Quarterly {date} (10-Q)'
     files.append((label, os.path.join(BASE_DIR, fname)))
 
-# Keywords relevant to McDonald's business model
+# Comprehensive keywords relevant to McDonald's business model
 KEY_SECTIONS = [
     # Revenue / income
     'revenue', 'net income', 'net loss', 'operating income', 'operating profit',
     'total revenues', 'company-operated', 'franchised', 'franchise',
+    'franchise revenues', 'sales by franchisees', 'franchised restaurants',
     # Cost structure
     'food and paper', 'payroll', 'occupancy', 'selling general', 'g&a',
     'general and administrative', 'cost of', 'gross margin', 'gross profit',
+    'food costs', 'beverage costs', 'paper costs',
     # Refranchising / asset-light
     'refranchis', 'asset-light', 'developmental license', 'ownership structure',
+    're-franchis', 'ownership mix',
     # Comparable sales
     'comparable sales', 'systemwide sales', 'system-wide', 'same-store',
-    'guest count', 'average check', 'traffic',
+    'guest count', 'average check', 'traffic', 'comps',
     # Segments
     'segment', 'u.s.', 'international operated markets', 'iom',
     'international developmental licensed', 'idl', 'corporate',
+    'united states', 'europe', 'asia pacific', 'middle east',
+    'latin america', 'canada', 'australia', 'germany', 'france',
+    'united kingdom', 'china', 'japan', 'brazil',
     # Digital / delivery
     'digital', 'loyalty', 'mobile', 'delivery', 'drive-thru', 'drive thru',
-    'technology', 'app', 'MyMcDonald',
-    # Strategy
+    'technology', 'app', 'MyMcDonald', 'digital sales', 'mc delivery',
+    'kiosk', 'self-order', 'mobile order', 'curbside',
+    # Menu / food strategy
     'velocity', 'accelerating', 'arches', 'our food', 'plan to win',
     'accelerate the arches', 'best burger', 'chicken', 'beverage',
+    'core menu', 'menu innovation', 'limited time', 'breakfast',
+    'value meal', 'dollar menu', 'mcvalue', 'snack wrap',
     # Debt / capital
     'long-term debt', 'debt', 'interest expense', 'share repurchase',
     'dividends', 'capital expenditure', 'capex', 'return to shareholders',
+    'buyback', 'repurchase program', 'borrowing',
     # Employees / labor
-    'employees', 'headcount', 'labor', 'minimum wage',
+    'employees', 'headcount', 'labor', 'minimum wage', 'crew',
+    'staffing', 'turnover',
     # Risk / macro
     'risk factor', 'inflation', 'foreign currency', 'exchange rate',
     'commodity', 'beef', 'economic', 'competition', 'regulation',
-    'franchise system', 'franchisee',
+    'franchise system', 'franchisee', 'food safety', 'health',
+    'outbreak', 'recall', 'litigation',
     # Cash flow
     'cash flow', 'free cash flow', 'liquidity', 'capital resources',
+    'operating cash flow', 'financing activities', 'investing activities',
     # Store count
     'restaurants', 'restaurant count', 'new restaurant', 'closed', 'openings',
+    'net restaurant', 'restaurant closings', 'development',
+    # Earnings per share
+    'earnings per share', 'diluted', 'basic', 'weighted average',
+    'shares outstanding', 'share count',
     # Recent / guidance
     'outlook', 'guidance', 'full year', 'first quarter', 'second quarter',
     'third quarter', 'fourth quarter',
+    # Real estate
+    'real estate', 'land', 'building', 'lease', 'rent',
+    # Advertising
+    'advertising', 'marketing', 'national advertising', 'advertising fund',
+    # Franchisee economics
+    'franchisee profitability', 'cash flow for franchise', 'restaurant margin',
+    'operating margin', 'restaurant-level',
+    # International
+    'foreign', 'international', 'global', 'exchange', 'translation',
+    'currency impact', 'constant currency',
+    # Supply chain
+    'supply chain', 'distribution', 'logistics', 'supplier',
+    # Sustainability / ESG
+    'sustainability', 'diversity', 'inclusion', 'climate', 'emissions',
+    'environmental', 'governance', 'ESG',
+    # Special items
+    'impairment', 'restructuring', 'strategic', 'initiative',
+    'accelerating the organization', 'modernize',
+    # Tax
+    'income tax', 'effective tax rate', 'tax reform', 'tax rate',
+    # Balance sheet
+    'total assets', 'total liabilities', 'shareholders equity',
+    'stockholders equity', 'retained earnings', 'accumulated deficit',
+    # Related party
+    'related party', 'affiliate', 'consolidated',
+    # Lease
+    'operating lease', 'finance lease', 'right-of-use', 'lease liability',
+    'lease obligation',
 ]
 
 def extract_financial_text(path):
@@ -100,7 +144,7 @@ def extract_financial_text(path):
     return result
 
 
-OUT_PATH = '/tmp/mcd_extracted.txt'
+OUT_PATH = os.path.join(os.path.dirname(__file__), '..', 'mcd_extracted.txt')
 with open(OUT_PATH, 'w', encoding='utf-8') as out:
     for label, path in files:
         sep = '=' * 80
